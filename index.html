@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A creative interactive birthday surprise website built with HTML, CSS and JavaScript.">
+  <meta property="og:title" content="Birthday Surprise Website | Creative Web Project">
+  <meta property="og:description" content="A creative interactive birthday surprise website built with HTML, CSS and JavaScript.">
+  <title>Birthday Surprise Website | Creative Web Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PASSWORD LOCK SCREEN (demo password is set in script.js) -->
+<div id="lockScreen" class="lock-screen" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <form id="lockForm" class="lock-card glass" autocomplete="off">
+    <div class="lock-icon" aria-hidden="true">🔒</div>
+    <h1 id="lockTitle">A little surprise for you ❤️</h1>
+    <p>Enter the secret word to open it.</p>
+    <input id="lockInput" type="password" placeholder="Secret word" aria-label="Secret word" autocomplete="off">
+    <button type="submit" class="btn-cosmic">Open ✨</button>
+    <p id="lockHint" class="lock-hint"></p>
+    <p id="lockError" class="lock-error" role="alert"></p>
+  </form>
+</div>
+
+<!-- BACKGROUND: glitter canvas, floating hearts, confetti (decorative) -->
+<canvas id="glitterCanvas" aria-hidden="true"></canvas>
+<div id="floatingHearts" aria-hidden="true"></div>
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+<!-- MUSIC (use any royalty-free demo track) -->
+<audio id="birthdayMusic" loop>
+  <source src="music/birthday-song.mp3" type="audio/mpeg">
+</audio>
+<button id="musicBtn" class="music-btn" aria-label="Toggle background music" aria-pressed="false">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span id="musicLabel">🔇 Music Off</span>
+</button>
+<div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top cosmic-nav">
+  <div class="container">
+    <a class="navbar-brand" href="#home" aria-label="Home">❤️</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#countdown">Countdown</a></li>
+        <li class="nav-item"><a class="nav-link" href="#memories">Memories</a></li>
+        <li class="nav-item"><a class="nav-link" href="#story">Our Story</a></li>
+        <li class="nav-item"><a class="nav-link" href="#foryou">For You</a></li>
+        <li class="nav-item"><a class="nav-link" href="#question">Question</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+<!-- HERO SECTION -->
+<section id="home" class="hero">
+  <div class="container text-center">
+    <!-- Demo date: keep in sync with birthdayDate in script.js -->
+    <p class="date-tag reveal">25 December 🎂</p>
+    <h1 class="glow reveal">Happy Birthday, Beautiful Soul ❤️</h1>
+    <p class="lead-line reveal">To my favorite person, and one of the most beautiful parts of my life.</p>
+    <p class="hero-msg reveal">Today isn't just another day on the calendar. It's the day someone truly special came into this world. And I'm so lucky that our paths crossed.</p>
+    <a href="#countdown" class="btn-cosmic reveal">Begin Our Story ❤️</a>
+  </div>
+</section>
+
+<p class="quote reveal">"My favorite person deserves a favorite day."</p>
+
+<!-- COUNTDOWN SECTION -->
+<section id="countdown" class="section">
+  <div class="container text-center">
+    <h2 class="reveal">Counting Every Moment Until Your Birthday</h2>
+    <p class="sub reveal">Your special day is getting closer, one second at a time. And honestly, I can't wait to celebrate the beautiful person you are.</p>
+    <div id="countdownGrid" class="count-grid reveal">
+      <div class="count-card"><span id="cdWeeks">00</span><small>Weeks</small></div>
+      <div class="count-card"><span id="cdDays">00</span><small>Days</small></div>
+      <div class="count-card"><span id="cdHours">00</span><small>Hours</small></div>
+      <div class="count-card"><span id="cdMinutes">00</span><small>Minutes</small></div>
+      <div class="count-card"><span id="cdSeconds">00</span><small>Seconds</small></div>
+    </div>
+    <div id="birthdayArrived" class="arrived" hidden>
+      <h3 class="glow">IT'S YOUR DAY, BEAUTIFUL SOUL! 🎂❤️</h3>
+      <p>The wait is finally over. Today belongs to you.</p>
+    </div>
+  </div>
+</section>
+
+<p class="quote reveal">"One beautiful girl. One very special birthday."</p>
+
+<!-- PERSONAL LETTER -->
+<section id="letter" class="section">
+  <div class="container">
+    <article class="letter glass reveal">
+      <h2>For You, Someone Special ❤️</h2>
+      <p>Dear Someone Special,</p>
+      <p>I could probably write a thousand words and still not be able to explain what you mean to me.</p>
+      <p>You have become such a beautiful part of my life, and I'm genuinely grateful for every memory, every conversation, every laugh, and every little moment we've shared.</p>
+      <p>I hope you always know that you are appreciated, valued, and loved.</p>
+      <p>I hope you continue chasing your dreams, smiling your beautiful smile, and being exactly who you are.</p>
+      <p>On your birthday, I don't just wish you another year of life. I wish you a year full of happiness, peace, success, beautiful surprises, and moments that make your heart genuinely happy.</p>
+      <p>And I hope I get to be there for many of those moments.</p>
+      <p>Happy Birthday, Beautiful Soul. ❤️</p>
+      <p class="sign">— Yours, always ❤️</p>
+    </article>
+  </div>
+</section>
+
+<p class="quote reveal">"Your smile is one of my favorite things."</p>
+
+<!-- MEMORY GALLERY (generic avatar illustrations) -->
+<section id="memories" class="section">
+  <div class="container">
+    <h2 class="text-center reveal">That Smile Deserves Its Own Gallery.</h2>
+    <p class="sub text-center reveal">Some pictures capture a moment. Some pictures capture a feeling. These are a few of my favorite little pieces of you.</p>
+    <div class="row g-4 justify-content-center gallery">
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: That smile">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>That smile ❤️</strong><span>Honestly, I could look at this smile forever.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: Simply you">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>Simply you 🌸</strong><span>Beautiful without even trying.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: One of my favorites">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>One of my favorites ✨</strong><span>A picture I can never scroll past.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: This moment">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>This moment ❤️</strong><span>Some moments become memories before you even realize it.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: My favorite view">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>My favorite view 🥹</strong><span>No scenery could compete with this.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: That look">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>That look 👀</strong><span>And somehow you still manage to make my heart skip a beat.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: Beautiful, as always">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>Beautiful, as always 🌷</strong><span>You make ordinary moments feel special.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: A memory worth keeping">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>A memory worth keeping 💕</strong><span>One more little moment that I'll always remember.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: Just being herself">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>Just being you ❤️</strong><span>And that's exactly what makes you special.</span></figcaption></figure></div>
+
+      <div class="col-6 col-md-4 col-lg-3 reveal"><figure class="polaroid" tabindex="0" role="button" aria-label="Open illustration: Forever a favorite">
+        <div class="ph"><img src="assets/images/girl-avatar-2.svg" alt="Girl avatar illustration" loading="lazy"></div>
+        <figcaption><strong>Forever a favorite ✨</strong><span>Some pictures become favorites for reasons you can't explain.</span></figcaption></figure></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX (fullscreen image viewer) -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close viewer">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous image">‹</button>
+  <figure class="lb-fig">
+    <img id="lbImg" src="" alt="">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next image">›</button>
+</div>
+
+<p class="quote reveal">"Some memories are impossible to forget."</p>
+
+<!-- OUR FAVORITE MOMENTS -->
+<section id="story" class="section">
+  <div class="container">
+    <h2 class="text-center reveal">Our Favorite Moments ❤️</h2>
+    <p class="sub text-center reveal">Countless memories. One beautiful story.</p>
+    <div class="timeline">
+
+      <div class="t-item reveal"><span class="node" aria-hidden="true"></span>
+        <div class="t-card glass"><img src="assets/images/girl-avatar-2.svg" alt="Chapter one illustration" loading="lazy">
+          <time>Chapter 1</time><h3>The Beginning ❤️</h3>
+          <p>Every story has a beginning. Looking back, I don't think I realized how many beautiful memories would come from this chapter.</p>
+          <em>Where our story started.</em></div></div>
+
+      <div class="t-item reveal"><span class="node" aria-hidden="true"></span>
+        <div class="t-card glass"><img src="assets/images/girl-avatar-2.svg" alt="Chapter two illustration" loading="lazy">
+          <time>Chapter 2</time><h3>More Than Just Memories 🌸</h3>
+          <p>Another year brought more conversations, more laughs, more memories, and more reasons to be grateful for having you in my life.</p>
+          <em>Another chapter together.</em></div></div>
+
+      <div class="t-item reveal"><span class="node" aria-hidden="true"></span>
+        <div class="t-card glass"><img src="assets/images/girl-avatar-2.svg" alt="Chapter three illustration" loading="lazy">
+          <time>Chapter 3</time><h3>Growing Together ✨</h3>
+          <p>Somewhere along the way, the little moments became the moments I cared about the most. And somehow, you became an even bigger part of my world.</p>
+          <em>More memories. More reasons to smile.</em></div></div>
+
+      <div class="t-item reveal"><span class="node" aria-hidden="true"></span>
+        <div class="t-card glass"><img src="assets/images/girl-avatar-2.svg" alt="Chapter four illustration" loading="lazy">
+          <time>Chapter 4</time><h3>Still Choosing You ❤️</h3>
+          <p>Here we are, still making memories, still laughing, still creating our story — and hopefully just getting started.</p>
+          <em>Our story continues...</em></div></div>
+    </div>
+  </div>
+</section>
+
+<p class="quote reveal">"More memories. More laughter. More us."</p>
+
+<!-- THINGS TO REMEMBER -->
+<section id="foryou" class="section">
+  <div class="container">
+    <h2 class="text-center reveal">Things I Hope You Always Remember</h2>
+    <div class="row g-4 mt-2">
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>❤️ You Are Appreciated</h3><p>Even when I don't say it enough, please remember that your presence in my life means more than you know.</p></div></div>
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>🌙 Your Dreams Matter</h3><p>Never stop believing in yourself. I hope you achieve every dream you've ever wished for.</p></div></div>
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>🌸 Your Happiness Matters</h3><p>I hope life gives you countless reasons to smile, laugh, and feel genuinely happy.</p></div></div>
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>✨ You Are Beautiful</h3><p>Not just because of how you look, but because of the person you are.</p></div></div>
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>🌷 You Deserve Beautiful Things</h3><p>You deserve beautiful days, beautiful memories, genuine happiness, and everything that makes your heart feel full.</p></div></div>
+      <div class="col-md-6 col-lg-4 reveal"><div class="rem-card glass"><h3>❤️ Never Change</h3><p>Keep being the kind, beautiful, wonderful person you are.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<p class="quote reveal">"You make ordinary moments feel extraordinary."</p>
+
+<!-- DO YOU LOVE ME -->
+<section id="question" class="section">
+  <div class="container text-center">
+    <h2 class="reveal">Okay... One Very Important Question 👀</h2>
+    <h3 class="big-q glow reveal">Do You Love Me? ❤️</h3>
+    <div id="arena" class="arena reveal">
+      <button id="yesBtn" class="btn-cosmic yes">YES ❤️</button>
+      <button id="noBtn" class="btn-no">NO 😏</button>
+    </div>
+    <p id="noMsg" class="no-msg" role="status" aria-live="polite"></p>
+    <div id="yesResult" class="yes-result" hidden>
+      <h3 class="glow">I KNEW IT! 🥹❤️</h3>
+      <p>And I love you more than this little website could ever explain.</p>
+      <p class="sign">You + Me = My Favorite Story ❤️</p>
+    </div>
+  </div>
+</section>
+
+<p class="quote reveal">"Today is about celebrating you. ❤️"</p>
+
+<!-- FINAL MESSAGE -->
+<section id="final" class="section final">
+  <div class="container">
+    <div class="final-card glass reveal">
+      <div class="big-heart" aria-hidden="true">❤️</div>
+      <h2>Before You Go... ❤️</h2>
+      <p>If you remember only one thing from this little birthday surprise, remember this:</p>
+      <p class="strong">You are special.<br>You are appreciated.<br>You are loved.</p>
+      <p>And I hope this new year of your life brings you everything your heart has been wishing for.</p>
+      <p>Keep smiling that beautiful smile.<br>Keep chasing your dreams.<br>Keep being you.</p>
+      <p>And let's make many, many more beautiful memories together.</p>
+      <p class="strong">Happy Birthday, Beautiful Soul. 🎂❤️</p>
+      <p>My favorite person.</p>
+      <p class="sign">Here's to you, today and always. ❤️</p>
+      <p class="date-tag">25 December 🎂</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Made with ❤️ especially for someone special</p>
+  <p>25 December 🎂</p>
+  <p class="small-note">One birthday. A thousand memories. And hopefully many more to come.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
